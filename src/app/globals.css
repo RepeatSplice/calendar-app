@@ -24,3 +24,12 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Custom FullCalendar styles */
+.fc .fc-button-primary {
+  @apply bg-blue-600 border-blue-600 text-white hover:bg-blue-700;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  @apply bg-blue-50;
+}
