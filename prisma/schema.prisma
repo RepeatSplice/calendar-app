@@ -51,6 +51,8 @@ model Event {
   start     DateTime
   end       DateTime
   allDay    Boolean  @default(false)
+  timezone  String?  @default("UTC")
+  recurring Json?    // Stores recurring event configuration
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

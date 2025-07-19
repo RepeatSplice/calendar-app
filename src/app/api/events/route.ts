@@ -30,21 +30,45 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const data = await request.json();
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
+  try {
+    const data = await request.json();
+    console.log("Received event data:", data);
 
-  if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
-  }
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
 
-  const newEvent = await prisma.event.create({
-    data: {
-      ...data,
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    // Convert date strings to DateTime objects
+    const eventData = {
+      title: data.title,
+      start: new Date(data.start + (data.allDay ? "T00:00:00" : "")),
+      end: new Date(data.end + (data.allDay ? "T23:59:59" : "")),
+      allDay: data.allDay || false,
+      timezone: data.timezone || "UTC",
+      recurring: data.recurring ? JSON.stringify(data.recurring) : null,
       userId: user.id,
-    },
-  });
+    };
 
-  return NextResponse.json(newEvent);
+    console.log("Processed event data:", eventData);
+
+    const newEvent = await prisma.event.create({
+      data: eventData,
+    });
+
+    console.log("Created event:", newEvent);
+    return NextResponse.json(newEvent);
+  } catch (error) {
+    console.error("Error creating event:", error);
+    return NextResponse.json(
+      {
+        error: "Failed to create event",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
+  }
 }
