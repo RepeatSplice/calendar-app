@@ -45,7 +45,7 @@ export async function PUT(
         : undefined,
       allDay: data.allDay,
       timezone: data.timezone,
-      recurring: data.recurring ? JSON.stringify(data.recurring) : null,
+      recurring: data.recurring ? JSON.stringify(data.recurring) : undefined,
     };
 
     console.log("Processed update data:", updateData);

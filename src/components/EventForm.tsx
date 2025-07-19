@@ -52,9 +52,7 @@ export default function EventForm({
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
   const [allDay, setAllDay] = useState(true);
-  const [timezone, setTimezone] = useState(
-    selectedTimezone || Intl.DateTimeFormat().resolvedOptions().timeZone
-  );
+  // Removed unused timezone state variable
   const [isRecurring, setIsRecurring] = useState(false);
   const [recurringFrequency, setRecurringFrequency] = useState<
     "daily" | "weekly" | "monthly" | "yearly"
@@ -71,11 +69,7 @@ export default function EventForm({
       setStart(new Date(event.start).toISOString().slice(0, 16));
       setEnd(new Date(event.end).toISOString().slice(0, 16));
       setAllDay(event.allDay || false);
-      setTimezone(
-        event.timezone ||
-          selectedTimezone ||
-          Intl.DateTimeFormat().resolvedOptions().timeZone
-      );
+      // Removed setTimezone call
       setIsRecurring(!!event.recurring);
       if (event.recurring) {
         setRecurringFrequency(event.recurring.frequency);
@@ -95,9 +89,6 @@ export default function EventForm({
         // For quick actions, default to all-day events
         // Create timezone-aware datetime for the selected date
         const dateInTimezone = new Date(selectedDate + "T00:00:00");
-        const utcDate = new Date(
-          dateInTimezone.toLocaleString("en-US", { timeZone: selectedTimezone })
-        );
 
         setStart(selectedDate);
         setEnd(selectedDate);
@@ -114,9 +105,6 @@ export default function EventForm({
       setRecurringFrequency("weekly");
       setRecurringInterval(1);
       setRecurringEndDate("");
-      setTimezone(
-        selectedTimezone || Intl.DateTimeFormat().resolvedOptions().timeZone
-      );
     } else {
       // Creating new event without selected date (custom button)
       setTitle("");
@@ -138,9 +126,6 @@ export default function EventForm({
       setRecurringFrequency("weekly");
       setRecurringInterval(1);
       setRecurringEndDate("");
-      setTimezone(
-        selectedTimezone || Intl.DateTimeFormat().resolvedOptions().timeZone
-      );
     }
   }, [event, selectedDate, quickActionType, isOpen, selectedTimezone]);
 
