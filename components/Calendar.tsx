@@ -1,7 +1,7 @@
-'use client'; 
+"use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
-import Day from './Day';
+import React, { useState, useEffect, useCallback } from "react";
+import Day from "./Day";
 
 // Define the type for our notes state
 interface Notes {
@@ -21,15 +21,18 @@ const Calendar: React.FC = () => {
     return new Date(year, month, 1).getDay(); // 0 for Sunday, 6 for Saturday
   }, []);
 
-  const getMonthName = useCallback((monthIndex: number): string => {
-    const date = new Date(currentDate.getFullYear(), monthIndex, 1);
-    return date.toLocaleString('en-US', { month: 'long' });
-  }, [currentDate]);
+  const getMonthName = useCallback(
+    (monthIndex: number): string => {
+      const date = new Date(currentDate.getFullYear(), monthIndex, 1);
+      return date.toLocaleString("en-US", { month: "long" });
+    },
+    [currentDate]
+  );
 
   // Load notes from localStorage on component mount
   useEffect(() => {
     try {
-      const storedNotes = localStorage.getItem('calendarNotes');
+      const storedNotes = localStorage.getItem("calendarNotes");
       if (storedNotes) {
         setNotes(JSON.parse(storedNotes) as Notes);
       }
@@ -41,7 +44,7 @@ const Calendar: React.FC = () => {
   // Save notes to localStorage whenever notes state changes
   useEffect(() => {
     try {
-      localStorage.setItem('calendarNotes', JSON.stringify(notes));
+      localStorage.setItem("calendarNotes", JSON.stringify(notes));
     } catch (error) {
       console.error("Failed to save notes to localStorage:", error);
     }
@@ -62,28 +65,35 @@ const Calendar: React.FC = () => {
   };
 
   const addOrUpdateNote = (date: string, noteContent: string) => {
-    setNotes(prevNotes => ({
+    setNotes((prevNotes) => ({
       ...prevNotes,
       [date]: noteContent,
     }));
   };
 
-  const days: JSX.Element[] = [];
+  const days: React.JSX.Element[] = [];
 
   // Add empty placeholders for days before the 1st
   for (let i = 0; i < startDay; i++) {
-    days.push(<div key={`empty-${i}`} className="p-2 border border-gray-200 bg-gray-50 aspect-square"></div>);
+    days.push(
+      <div
+        key={`empty-${i}`}
+        className="p-2 border border-gray-200 bg-gray-50 aspect-square"
+      ></div>
+    );
   }
 
   // Add actual days
   for (let i = 1; i <= numDays; i++) {
-    const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+    const dateString = `${year}-${String(month + 1).padStart(2, "0")}-${String(
+      i
+    ).padStart(2, "0")}`;
     days.push(
       <Day
         key={dateString}
         date={i}
         fullDate={dateString}
-        note={notes[dateString] || ''}
+        note={notes[dateString] || ""}
         onSaveNote={addOrUpdateNote}
       />
     );
@@ -117,9 +127,7 @@ const Calendar: React.FC = () => {
         <div>Fri</div>
         <div className="text-blue-600">Sat</div>
       </div>
-      <div className="grid grid-cols-7 gap-1">
-        {days}
-      </div>
+      <div className="grid grid-cols-7 gap-1">{days}</div>
     </div>
   );
 };

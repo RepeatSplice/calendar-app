@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       end: new Date(data.end + (data.allDay ? "T23:59:59" : "")),
       allDay: data.allDay || false,
       timezone: data.timezone || "UTC",
-      recurring: data.recurring ? JSON.stringify(data.recurring) : null,
+      recurring: data.recurring ? JSON.stringify(data.recurring) : undefined,
       userId: user.id,
     };
 

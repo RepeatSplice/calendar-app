@@ -88,8 +88,6 @@ export default function EventForm({
       ) {
         // For quick actions, default to all-day events
         // Create timezone-aware datetime for the selected date
-        const dateInTimezone = new Date(selectedDate + "T00:00:00");
-
         setStart(selectedDate);
         setEnd(selectedDate);
         setAllDay(true);
@@ -111,11 +109,8 @@ export default function EventForm({
 
       // Get current time in selected timezone
       const now = new Date();
-      const timeInTimezone = new Date(
-        now.toLocaleString("en-US", { timeZone: selectedTimezone })
-      );
-      const startTime = new Date(timeInTimezone.getTime() + 60 * 60 * 1000); // 1 hour from now
-      const endTime = new Date(timeInTimezone.getTime() + 2 * 60 * 60 * 1000); // 2 hours from now
+      const startTime = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour from now
+      const endTime = new Date(now.getTime() + 2 * 60 * 60 * 1000); // 2 hours from now
 
       setStart(startTime.toISOString().slice(0, 16));
       setEnd(endTime.toISOString().slice(0, 16));
